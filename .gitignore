@@ -1,0 +1,13 @@
+# IDE config
+.idea
+.vscode
+
+# Node dependencies
+node_modules/
+
+# Next.js files
+.next/
+.env.local
+
+# Secrets
+.env
