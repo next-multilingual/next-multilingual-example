@@ -26,4 +26,4 @@ Before updating, this repository, we recommend the following steps:
 When you are ready to update this repository, you can do the following steps:
 
 - run `npm run synchronize-repo`
-- run `ncu` to usee the same packages as `next-multilingual` and also get the latest npm version
+- run `ncu` to use the same packages as `next-multilingual` and also get the latest npm version
