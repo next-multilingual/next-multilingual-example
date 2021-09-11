@@ -3,9 +3,7 @@ const { resolve } = require('path');
 const { removeSync, copySync } = require('fs-extra');
 const { exit } = require('process');
 
-console.log(
-  `\n➰ starting repository synchronization from the \`next-multilingual\` example...`
-);
+console.log(`\n➰ starting repository synchronization from the \`next-multilingual\` example...`);
 
 const exampleDirectoryPath = resolve('../next-multilingual/example');
 
@@ -23,6 +21,8 @@ const protectedFiles = [
   'synchronize-repo.js',
   'README.md',
   'next-multilingual-banner.svg',
+  '.eslintrc.json',
+  '.eslintignore'
 ].map((file) => resolve(file));
 
 console.log(`\n✨ trying to clean current repository files..\n`);
@@ -44,20 +44,15 @@ if (!deleteCount) {
 console.log(`\n✨ trying to copy \`next-multilingual\` example files..\n`);
 
 let copyCount = 0;
-readdirSync(exampleDirectoryPath, { withFileTypes: true }).forEach(
-  (directoryEntry) => {
-    const directoryEntryPath = resolve(
-      exampleDirectoryPath,
-      directoryEntry.name
-    );
-    const destinationPath = resolve('.', directoryEntry.name);
-    if (!protectedFiles.includes(destinationPath)) {
-      copySync(directoryEntryPath, destinationPath);
-      console.log(`- ✔️  copied ${directoryEntryPath}`);
-      copyCount++;
-    }
+readdirSync(exampleDirectoryPath, { withFileTypes: true }).forEach((directoryEntry) => {
+  const directoryEntryPath = resolve(exampleDirectoryPath, directoryEntry.name);
+  const destinationPath = resolve('.', directoryEntry.name);
+  if (!protectedFiles.includes(destinationPath)) {
+    copySync(directoryEntryPath, destinationPath);
+    console.log(`- ✔️  copied ${directoryEntryPath}`);
+    copyCount++;
   }
-);
+});
 
 if (!copyCount) {
   console.log(`- ❌ could not find anything to copy`);
