@@ -20,9 +20,7 @@ const protectedFiles = [
   'package-lock.json',
   'synchronize-repo.js',
   'README.md',
-  'next-multilingual-banner.svg',
-  '.eslintrc.json',
-  '.eslintignore'
+  'next-multilingual-banner.svg'
 ].map((file) => resolve(file));
 
 console.log(`\n✨ trying to clean current repository files..\n`);
