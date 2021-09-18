@@ -109,32 +109,27 @@ export default function IndexPage({ resolvedLocale }: ResolvedLocaleServerSidePr
 export async function getServerSideProps(
   nextPageContext: NextPageContext
 ): Promise<{ props: ResolvedLocaleServerSideProps }> {
-  console.log('getServerSideProps on /');
-
   const { req, locale, locales, defaultLocale } = nextPageContext;
 
-  try {
-    const actualLocales = getActualLocales(locales, defaultLocale);
-    const actualDefaultLocale = getActualDefaultLocale(locales, defaultLocale);
-    const cookieLocale = getCookieLocale(nextPageContext, actualLocales);
-    let resolvedLocale = getActualLocale(locale, defaultLocale, locales);
+  const actualLocales = getActualLocales(locales, defaultLocale);
+  const actualDefaultLocale = getActualDefaultLocale(locales, defaultLocale);
+  const cookieLocale = getCookieLocale(nextPageContext, actualLocales);
+  let resolvedLocale = getActualLocale(locale, defaultLocale, locales);
 
-    // When Next.js tries to use the default locale, try to find a better one.
-    if (locale === defaultLocale) {
-      resolvedLocale = cookieLocale
-        ? cookieLocale
-        : getPreferredLocale(
-            req.headers['accept-language'],
-            actualLocales,
-            actualDefaultLocale
-          ).toLowerCase();
-    }
-    return {
-      props: {
-        resolvedLocale
-      }
-    };
-  } catch (error) {
-    console.dir(error);
+  // When Next.js tries to use the default locale, try to find a better one.
+  if (locale === defaultLocale) {
+    resolvedLocale = cookieLocale
+      ? cookieLocale
+      : getPreferredLocale(
+          req.headers['accept-language'],
+          actualLocales,
+          actualDefaultLocale
+        ).toLowerCase();
   }
+
+  return {
+    props: {
+      resolvedLocale
+    }
+  };
 }
