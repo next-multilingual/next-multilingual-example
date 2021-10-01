@@ -1,5 +1,8 @@
 # ![next-multilingual](./next-multilingual-banner.svg)
 
+![Vercel](https://therealsujitk-vercel-badge.vercel.app/?app=next-multilingual-example)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/daa36264-dcf3-4a84-bfed-63af73e35adb/deploy-status)](https://app.netlify.com/sites/next-multilingual/deploys)
+
 This repository is an example application using [`next-multilingual`](https://github.com/Avansai/next-multilingual).
 
 ## How to use? 💻
