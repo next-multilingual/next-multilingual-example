@@ -2,5 +2,12 @@
 # 
 # Details here: https://answers.netlify.com/t/runtime-unhandledpromiserejection-on-my-next-js-app/44672
 
+[build]
+  command = "npm run build"
+  publish = "out"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs-experimental"
+
+[functions]
+  included_files = [".next/*.json"]
