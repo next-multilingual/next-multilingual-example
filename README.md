@@ -13,6 +13,11 @@ Simply clone the repository and run the standard Next.js commands (examples usin
 - `npm run build`
 - `npm run start`
 
+## How to test? 🧪
+
+- Vercel: https://next-multilingual-example.vercel.app/
+- Netlify: https://next-multilingual.netlify.app/
+
 ## Contributing 💨
 
 This repository isn't meant to be modified directly as it is a copy of the [`example`](https://github.com/Avansai/next-multilingual/tree/main/example) provided in [`next-multilingual`](https://github.com/Avansai/next-multilingual).
