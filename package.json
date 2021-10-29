@@ -22,6 +22,7 @@
     "eslint-config-next": "^11.1.3-canary.97",
     "fs-extra": "^10.0.0",
     "prettier": "^2.4.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "webpack": "^5.60.0"
   }
 }
