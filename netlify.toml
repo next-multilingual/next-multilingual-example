@@ -1,6 +1,4 @@
 # This file is only used when deploying with Netlify.
-# 
-# Details here: https://answers.netlify.com/t/runtime-unhandledpromiserejection-on-my-next-js-app/44672
 
 [build]
 publish = ".next"

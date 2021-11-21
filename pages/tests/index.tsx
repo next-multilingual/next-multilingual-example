@@ -1,17 +1,15 @@
 import { useMessages, getTitle } from 'next-multilingual/messages';
-import Link from 'next-multilingual/link';
 import type { ReactElement } from 'react';
 import Layout from '@/layout';
+import styles from './index.module.css';
 
-export default function Custom400(): ReactElement {
+export default function Tests(): ReactElement {
   const messages = useMessages();
   const title = getTitle(messages);
   return (
     <Layout title={title}>
-      <h1>{title}</h1>
-      <Link href="/">
-        <a>{messages.format('goBack')}</a>
-      </Link>
+      <h1 className={styles.headline}>{title}</h1>
+      <p>{messages.format('details')}</p>
     </Layout>
   );
 }
