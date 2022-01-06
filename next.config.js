@@ -11,6 +11,7 @@
 const { getConfig } = require('next-multilingual/config');
 
 const config = getConfig('exampleApp', ['en-US', 'fr-CA'], {
+  experimental: { esmExternals: false },
   poweredByHeader: false,
   debug: true,
 });
