@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import Link, { useLocalizedUrl } from 'next-multilingual/link';
+import Link from 'next-multilingual/link';
 import { getTitle, useMessages } from 'next-multilingual/messages';
+import { useLocalizedUrl } from 'next-multilingual/url';
 import { useRouter } from 'next/router';
 
 import Layout from '@/layout';
@@ -33,12 +34,13 @@ const Id: NextPage = () => {
             <td>{messages.format('rowNonLocalizedPagePath')}</td>
             <td>{pathname}</td>
           </tr>
-          <tr>
-            <td>{messages.format('rowLocalizedWithAsPath')}</td>
-            {/* Adding `suppressHydrationWarning` until
+          {/* @see https://github.com/facebook/react/issues/24270 (re-enable test once the fix is available) */}
+          {/* <tr>
+            <td>{messages.format('rowLocalizedWithAsPath')}</td> */}
+          {/* Adding `suppressHydrationWarning` until
             https://github.com/vercel/next.js/issues/32772 is resolved */}
-            <td suppressHydrationWarning={true}>{asPath}</td>
-          </tr>
+          {/* <td suppressHydrationWarning={true}>{asPath}</td>
+          </tr> */}
           <tr>
             <td>{messages.format('rowLocalizedWithUseLocalizedUrl')}</td>
             <td>{localizedUrl}</td>
@@ -50,7 +52,7 @@ const Id: NextPage = () => {
         </tbody>
       </table>
       <div id="go-back">
-        <Link href="/dynamic-route-test" locale={locale}>
+        <Link href="/tests/dynamic-routes" locale={locale}>
           {messages.format('goBack')}
         </Link>
       </div>

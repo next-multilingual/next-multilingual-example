@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { isLocale } from 'next-multilingual';
 import { getMessages } from 'next-multilingual/messages';
+import { getLocalizedUrl } from 'next-multilingual/url/ssr';
 
 /**
  * Example API schema.
@@ -15,7 +17,7 @@ type Schema = {
  *
  * @returns An empty promise.
  */
-function delay(milliseconds): Promise<void> {
+function delay(milliseconds: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
@@ -28,7 +30,17 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse<Schema>
 ): Promise<void> {
-  const messages = getMessages(request.headers['accept-language']);
+  const locale = request.headers['accept-language'];
+  if (locale === undefined || !isLocale(locale)) {
+    response.status(400);
+    return;
+  }
+
+  const messages = getMessages(locale);
   await delay(2000);
-  response.status(200).json({ message: messages.format('message') });
+  response.status(200).json({
+    message: messages.format('message', {
+      contactUsUrl: getLocalizedUrl('/contact-us', locale, true),
+    }),
+  });
 }

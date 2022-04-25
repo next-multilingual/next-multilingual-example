@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
-import Link, { useLocalizedUrl } from 'next-multilingual/link';
+import Link from 'next-multilingual/link';
 import { getTitle, useMessages } from 'next-multilingual/messages';
+import { useLocalizedUrl } from 'next-multilingual/url';
 import router, { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -25,8 +26,10 @@ const Tests: NextPage = () => {
       <h1 className={styles.headline}>{title}</h1>
       <p>{messages.format('details')}</p>
       <p>
-        {messages.format('intro1')} <code className={styles.code}>/dynamic-route/test/[id]</code>{' '}
-        {messages.format('intro2')}
+        {messages.formatJsx('intro', {
+          url: localizedUrl,
+          code: <code className={styles.code}></code>,
+        })}
       </p>
       <div className={styles.parameter}>
         <label>
