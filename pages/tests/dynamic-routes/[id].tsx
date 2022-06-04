@@ -34,13 +34,17 @@ const Id: NextPage = () => {
             <td>{messages.format('rowNonLocalizedPagePath')}</td>
             <td>{pathname}</td>
           </tr>
-          {/* @see https://github.com/facebook/react/issues/24270 (re-enable test once the fix is available) */}
-          {/* <tr>
-            <td>{messages.format('rowLocalizedWithAsPath')}</td> */}
-          {/* Adding `suppressHydrationWarning` until
-            https://github.com/vercel/next.js/issues/32772 is resolved */}
-          {/* <td suppressHydrationWarning={true}>{asPath}</td>
-          </tr> */}
+          <tr>
+            <td>{messages.format('rowLocalizedWithAsPath')}</td>
+            {/**
+             * @see https://github.com/vercel/next.js/issues/32772 (why `suppressHydrationWarning` is used).
+             *
+             * If you need the `asPath` to match uniquely to each request then `getServerSideProps`
+             * should be used. `getStaticProps` is not meant to be unique per request but instead
+             * unique per-path.
+             */}
+            <td suppressHydrationWarning={true}>{asPath}</td>
+          </tr>
           <tr>
             <td>{messages.format('rowLocalizedWithUseLocalizedUrl')}</td>
             <td>{localizedUrl}</td>
