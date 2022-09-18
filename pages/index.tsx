@@ -1,36 +1,30 @@
+import { Layout } from '@/components/layout/Layout'
+import { useFruitsMessages } from '@/messages/fruits/useFruitsMessages'
+import type { GetServerSideProps, NextPage } from 'next'
 import {
-  getActualDefaultLocale,
-  getActualLocale,
-  getActualLocales,
-  getCookieLocale,
-  getPreferredLocale,
   normalizeLocale,
   ResolvedLocaleServerSideProps,
-  setCookieLocale,
+  resolveLocale,
+  useResolvedLocale,
 } from 'next-multilingual'
 import { getTitle, useMessages } from 'next-multilingual/messages'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next-multilingual/router'
+import { useRouter as useNextRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-
-import Layout from '@/components/layout/Layout'
-
-import { useFruitsMessages } from '../messages/fruits/useFruitsMessages'
+import { HelloApiSchema } from './api/hello'
 import styles from './index.module.css'
 
-import type { GetServerSideProps, NextPage } from 'next'
-import { HelloApiSchema } from './api/hello'
-
-const Home: NextPage<ResolvedLocaleServerSideProps> = ({ resolvedLocale }) => {
-  const router = useRouter()
-  const { locales, defaultLocale, basePath, locale } = router
-
-  // Overwrite the locale with the resolved locale.
-  router.locale = resolvedLocale
-  setCookieLocale(locale)
+const Homepage: NextPage<ResolvedLocaleServerSideProps> = ({ resolvedLocale }) => {
+  // Force Next.js to use a locale that was resolved dynamically on the homepage (this must be the first action on the homepage).
+  useResolvedLocale(resolvedLocale)
+  const { locale, locales, defaultLocale, basePath } = useRouter()
+  const nextRouter = useNextRouter()
 
   // Load the messages in the correct locale.
   const messages = useMessages()
   const fruitsMessages = useFruitsMessages()
+
+  const [fruit, setFruit] = useState(fruitsMessages.getAll()[0].key)
 
   // Counter used for ICU MessageFormat example.
   const [count, setCount] = useState(0)
@@ -55,7 +49,7 @@ const Home: NextPage<ResolvedLocaleServerSideProps> = ({ resolvedLocale }) => {
 
     setApiIsLoaded(false)
     const requestHeaders: HeadersInit = new Headers()
-    requestHeaders.set('Accept-Language', normalizeLocale(locale as string))
+    requestHeaders.set('Accept-Language', normalizeLocale(locale))
     fetch(`${basePath}/api/hello`, {
       headers: requestHeaders,
       signal: controllerRef.current?.signal,
@@ -109,17 +103,17 @@ const Home: NextPage<ResolvedLocaleServerSideProps> = ({ resolvedLocale }) => {
           <tbody>
             <tr>
               <td>{messages.format('rowDefaultLocale')}</td>
-              <td>{normalizeLocale(defaultLocale as string)}</td>
-              <td>{normalizeLocale(getActualDefaultLocale(locales, defaultLocale))}</td>
+              <td>{normalizeLocale(nextRouter.defaultLocale as string)}</td>
+              <td>{normalizeLocale(defaultLocale)}</td>
             </tr>
             <tr>
               <td>{messages.format('rowConfiguredLocales')}</td>
-              <td>{locales?.map((locale) => normalizeLocale(locale)).join(', ')}</td>
               <td>
-                {getActualLocales(locales, defaultLocale)
-                  ?.map((locale) => normalizeLocale(locale))
+                {(nextRouter.locales as string[])
+                  .map((locale) => normalizeLocale(locale))
                   .join(', ')}
               </td>
+              <td>{locales.map((locale) => normalizeLocale(locale)).join(', ')}</td>
             </tr>
           </tbody>
         </table>
@@ -137,9 +131,11 @@ const Home: NextPage<ResolvedLocaleServerSideProps> = ({ resolvedLocale }) => {
           </div>
           <div>
             {messages.format('sharedDropDown')}
-            <select>
+            <select onChange={(event) => setFruit(event.target.value)} value={fruit}>
               {fruitsMessages.getAll().map((message) => (
-                <option key={message.format()}>{message.format()}</option>
+                <option value={message.key} key={message.key}>
+                  {message.format()}
+                </option>
               ))}
             </select>
           </div>
@@ -179,33 +175,15 @@ const Home: NextPage<ResolvedLocaleServerSideProps> = ({ resolvedLocale }) => {
   )
 }
 
-export default Home
+export default Homepage
 
 export const getServerSideProps: GetServerSideProps<ResolvedLocaleServerSideProps> = async (
-  nextPageContext
+  context
   // eslint-disable-next-line @typescript-eslint/require-await
 ) => {
-  const { req, locale, locales, defaultLocale } = nextPageContext
-
-  const actualLocales = getActualLocales(locales, defaultLocale)
-  const actualDefaultLocale = getActualDefaultLocale(locales, defaultLocale)
-  const cookieLocale = getCookieLocale(nextPageContext, actualLocales)
-  let resolvedLocale = getActualLocale(locale, defaultLocale, locales)
-
-  // When Next.js tries to use the default locale, try to find a better one.
-  if (locale === defaultLocale) {
-    resolvedLocale =
-      cookieLocale ??
-      getPreferredLocale(
-        req.headers['accept-language'],
-        actualLocales,
-        actualDefaultLocale
-      ).toLowerCase()
-  }
-
   return {
     props: {
-      resolvedLocale,
+      resolvedLocale: resolveLocale(context),
     },
   }
 }
