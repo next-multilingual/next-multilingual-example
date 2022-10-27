@@ -1,5 +1,5 @@
 import Footer from '@/components/footer/Footer'
-import { LanguagePicker } from '@/components/language-picker/LanguagePicker'
+import { LanguageSwitcher } from '@/components/language-switcher/LanguageSwitcher'
 import Head from 'next-multilingual/head'
 import Link from 'next-multilingual/link'
 import { useMessages } from 'next-multilingual/messages'
@@ -39,18 +39,12 @@ export const Layout: React.FC<LayoutProps> = ({
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">{messages.format('header')}</a>
         </div>
-        <LanguagePicker localizedRouteParameters={localizedRouteParameters} />
+        <LanguageSwitcher localizedRouteParameters={localizedRouteParameters} />
         <nav className={styles.nav}>
-          <Link href="/">
-            <a>{messages.format('home')}</a>
-          </Link>
+          <Link href="/">{messages.format('home')}</Link>
           {/* The link below uses a trailing slash by design to test that the behavior is the same as Next.js (no impact). */}
-          <Link href="/about-us/">
-            <a>{messages.format('aboutUs')}</a>
-          </Link>
-          <Link href="/contact-us">
-            <a>{messages.format('contactUs')}</a>
-          </Link>
+          <Link href="/about-us">{messages.format('aboutUs')}</Link>
+          <Link href="/contact-us">{messages.format('contactUs')}</Link>
         </nav>
       </header>
       <main className={styles.main}>{children}</main>
