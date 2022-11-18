@@ -14,12 +14,13 @@
     "analyze": "cross-env ANALYZE=true next build",
     "analyze-server": "cross-env BUNDLE_ANALYZE=server next build",
     "analyze-browser": "cross-env BUNDLE_ANALYZE=browser next build",
+    "install-pre-release": "npm install next-multilingual@next",
     "synchronize-repo": "node synchronize-repo.mjs"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.0.4",
     "next": "13.0.4",
-    "next-multilingual": "^3.0.7-0",
+    "next-multilingual": "^3.0.7-1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
