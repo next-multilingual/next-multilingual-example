@@ -7,10 +7,10 @@ import { NextPage } from 'next'
 import Link from 'next-multilingual/link'
 import { getTitle, Messages, slugify, useMessages } from 'next-multilingual/messages'
 import { hydrateRouteParameters, useRouter } from 'next-multilingual/router'
-import { getLocalizedUrl } from 'next-multilingual/url'
+import { useLocalizedUrl } from 'next-multilingual/url'
 import router from 'next/router'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
-import { DynamicRoutesCityTestsProps } from './..'
+import { DynamicRoutesCityTestsProps } from '..'
 import styles from './index.module.css'
 
 const DynamicRoutesPointOfInterestTests: NextPage<DynamicRoutesCityTestsProps> = ({
@@ -25,7 +25,9 @@ const DynamicRoutesPointOfInterestTests: NextPage<DynamicRoutesCityTestsProps> =
   const shanghaiPoiMessages = useShanghaiPoiMessages()
 
   const [city, setCity] = useState(
-    citiesMessages.getRouteParameterKey(localizedRouteParameters[locale].city as string) as string
+    citiesMessages.getRouteParameterKey(
+      localizedRouteParameters[locale].cityName as string
+    ) as string
   )
 
   const getPoiMessages = useCallback(
@@ -65,13 +67,8 @@ const DynamicRoutesPointOfInterestTests: NextPage<DynamicRoutesCityTestsProps> =
     [locale, getPoiMessages, poi]
   )
 
-  const targetUrl = useMemo(
-    (): string =>
-      getLocalizedUrl(
-        hydrateRouteParameters(`${pathname}/[poi]`, { city: cityParameter, poi: poiParameter }),
-        locale
-      ),
-    [locale, cityParameter, pathname, poiParameter]
+  const targetUrl = useLocalizedUrl(
+    hydrateRouteParameters(`${pathname}/[poi]`, { cityName: cityParameter, poi: poiParameter })
   )
 
   return (
@@ -114,16 +111,18 @@ const DynamicRoutesPointOfInterestTests: NextPage<DynamicRoutesCityTestsProps> =
         </ul>
       </div>
       <div>
-        {messages.formatJsx('preview', {
-          localizedUrl: targetUrl,
-          code: <code id="url-preview" className={styles.code}></code>,
-          strong: <strong></strong>,
-        })}
+        <strong>{messages.format('preview')}</strong>
+        <code suppressHydrationWarning={true} id="url-preview" className={styles.code}>
+          {targetUrl}
+        </code>
       </div>
       <p>{messages.format('2links')}</p>
       <ul>
         <li>
-          <Link id="link-with-parameter" href={`${asPath}/${poiParameter}`}>
+          <Link
+            id="link-with-parameter"
+            href={`${pathname}/../../${cityParameter}/point-of-interest/${poiParameter}`}
+          >
             {messages.format('link1Text')}
           </Link>
         </li>
@@ -143,4 +142,4 @@ const DynamicRoutesPointOfInterestTests: NextPage<DynamicRoutesCityTestsProps> =
 
 export default DynamicRoutesPointOfInterestTests
 
-export { getStaticPaths, getStaticProps } from './..'
+export { getStaticPaths, getStaticProps } from '..'
